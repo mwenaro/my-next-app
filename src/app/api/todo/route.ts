@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     }
 
     if (!savedTodo) throw Error("Error insertind todo");
-    revalidatePath("/todos", 'page');
+    revalidatePath("/todos");
     return new NextResponse(JSON.stringify(savedTodo));
   } catch (error: any) {
     return new NextResponse(JSON.stringify({ msg: "Error " + error.message }), {
