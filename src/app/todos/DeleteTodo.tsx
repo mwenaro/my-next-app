@@ -12,7 +12,7 @@ try {
     if(!res.ok)  throw Error("Error deleting")
       //send revalidate reqeist
    let revData=  await (await fetch('/api/revalidate?path=/todos')).json()
-   console.log({revData})
+  //  console.log({revData})
     alert("Succfefully dleted!")
 } catch (error:any) {
     console.log(error.message)
