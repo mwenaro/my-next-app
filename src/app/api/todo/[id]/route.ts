@@ -1,6 +1,6 @@
 import { dbConnect } from "@/libs/mongoose/dbConnect";
 import { TodoModel } from "@/models/TodoModel";
-import { errorMonitor } from "events";
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request, query: { params: { id: any } }) {
@@ -53,6 +53,8 @@ export async function DELETE(req: Request, query: { params: { id: any } }) {
     await dbConnect();
     const deletedTodo = await TodoModel.findByIdAndDelete(id);
     if (!deletedTodo) throw Error("error deleting the todo");
+    // revalidatePath("/todos", 'page') 
+    
     return new NextResponse(JSON.stringify(deletedTodo));
   } catch (error: any) {
     return new NextResponse(JSON.stringify({ msg: "Error " + error.message }), {

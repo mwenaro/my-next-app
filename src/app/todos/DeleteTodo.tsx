@@ -8,8 +8,11 @@ interface DeleteTodoProps {
 export default function DeleteTodo({  id }: DeleteTodoProps) {
   async function remove() {
 try {
-    const res = await fetch("/api/todo/"+id)
+    const res = await fetch("/api/todo/"+id, {method:"DELETE"})
     if(!res.ok)  throw Error("Error deleting")
+      //send revalidate reqeist
+   let revData=  await (await fetch('/api/revalidate?path=/todos')).json()
+   console.log({revData})
     alert("Succfefully dleted!")
 } catch (error:any) {
     console.log(error.message)
