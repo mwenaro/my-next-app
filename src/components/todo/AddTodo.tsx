@@ -13,8 +13,7 @@ export default function AddTodo({ passedTodo = null }: AddTodoProps) {
     if (!e.target.value) return;
     setNewTodo({ ...newTodo, title: e.target.value });
   }
-
-  async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
+  async function submit() {
     try {
       const res = await fetch("/api/todo", {
         body: JSON.stringify(newTodo),
@@ -30,12 +29,30 @@ export default function AddTodo({ passedTodo = null }: AddTodoProps) {
       alert("Error " + error.message);
     }
   }
+  async function handleSubmit(e: MouseEvent<HTMLButtonElement>) {
+    e.preventDefault();
+    await submit();
+  }
+
+  async function handleSubmitByEnter(e: any) {
+    // return console.log(e.key);
+    e.preventDefault();
+    if (e.key.toLowerCase() === "enter") {
+      await submit();
+    }
+  }
+
   return (
     <div className="min-w-[400px] mx-auto px-8 py-6 bg-slate-400 ">
       <input
         type="text"
         value={newTodo.title}
         onChange={handleChange}
+        onKeyDown={(e) => {
+          if (e.key.toLowerCase() === "enter") {
+            handleSubmitByEnter(e);
+          }
+        }}
         placeholder="Enter todo title"
       />{" "}
       <button onClick={handleSubmit}>Add</button>

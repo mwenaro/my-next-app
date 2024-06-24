@@ -1,15 +1,18 @@
 "use client";
-import { Delete } from "lucide-react";
+import { Todo } from "@/types";
 import React from "react";
+import { FaEdit } from "react-icons/fa";
 
-interface DeleteTodoProps {
+interface EditTodoProps {
 //   handleDelete: (id: string) => void;
-  id: string;
+  activeTodo:Todo
 }
-export default function DeleteTodo({  id }: DeleteTodoProps) {
+export default function EditTodo({  activeTodo}: EditTodoProps) {
+
   async function remove() {
 try {
-    const res = await fetch("/api/todo/"+id, {method:"DELETE"})
+    const res = await fetch("/api/todo/"+activeTodo._id, 
+      {method:"PUT"})
     if(!res.ok)  throw Error("Error deleting")
       //send revalidate reqeist
    let revData=  await (await fetch('/api/revalidate?path=/todos')).json()
@@ -22,5 +25,5 @@ alert(error.message)
   }
   return <button 
   className="px-6 py-3 bgblue-800 text-white text-lg rounded-lg"
-  onClick={() => remove()}><Delete color="red" size={20} /></button>;
+  onClick={() => remove()}><FaEdit className="text-orange-700 text-xl" /></button>;
 }
