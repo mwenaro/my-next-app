@@ -1,12 +1,15 @@
 "use client";
-import { Delete } from "lucide-react";
-import React from "react";
+import React, { use } from "react";
+import Button from "../Button";
+import { useRouter } from "next/navigation";
 
 interface DeleteTodoProps {
 //   handleDelete: (id: string) => void;
   id: string;
+  className? : string
 }
-export default function DeleteTodo({  id }: DeleteTodoProps) {
+export default function DeleteTodo({  id, className="" }: DeleteTodoProps) {
+  const router = useRouter()
   async function remove() {
 try {
     const res = await fetch("/api/todo/"+id, {method:"DELETE"})
@@ -14,13 +17,14 @@ try {
       //send revalidate reqeist
    let revData=  await (await fetch('/api/revalidate?path=/todos')).json()
   //  console.log({revData})
-    alert("Succfefully dleted!")
+  router.refresh() 
+  alert("Successfully dleted!")
 } catch (error:any) {
     console.log(error.message)
 alert(error.message)
 }    
   }
-  return <button 
-  className="px-6 py-3 bgblue-800 text-white text-lg rounded-lg"
-  onClick={() => remove()}><Delete color="red" size={20} /></button>;
+  return <Button 
+  className={`p-3 bg-red-600 text-white text-lg rounded-lg ${className}`}
+  onClick={() => remove()}>Delete</Button>;
 }
